@@ -28,8 +28,6 @@ export default function CreateNFT() {
       }
     });
 
-    console.log(e.target.files);
-
     /** Setting file state */
     setFiles(e.target.files); // we will use the file state, to send it later to the server
 
@@ -41,14 +39,26 @@ export default function CreateNFT() {
   const onUploadFile = async (e: MouseEvent<HTMLButtonElement>) => {
     const formData = new FormData();
 
-    console.log(files);
-
     Array.from(files).forEach((file) => {
+      console.log(file);
       formData.append(file.name, file);
+      // console.log(formData);
     });
-    const res = await axios.post<UploadImgResponse[]>(
-      "http://localhost:3011/api/fino-image",
-      formData
+
+    for (var key of formData.entries()) {
+      console.log(key[0] + ", " + key[1]);
+    }
+
+    // console.log(formData);
+
+    const res = await axios.post(
+      "http://localhost:3011/api/fino-image/upload",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
 
     return res;
